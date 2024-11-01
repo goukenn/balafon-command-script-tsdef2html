@@ -336,6 +336,12 @@ class  TypeScriptDefToHtmlConverter
         $list[$name] = $sb;
     }
 
+    /**
+     * visit declared type
+     * @param mixed $e 
+     * @return void 
+     * @throws Exception 
+     */
     protected function _visit_declare_type($e)
     {
         $k = 'declare-type';
