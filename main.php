@@ -12,6 +12,7 @@ use IGK\System\Text\RegexMatcherUtility;
 
 use function igk_create_node_arg as _node;
 
+
 /**
  * tranform typescript declaratoin file to html 
  * @package 
@@ -19,6 +20,12 @@ use function igk_create_node_arg as _node;
 class  TypeScriptDefToHtmlConverter
 {
     const INTERFACE_GLOBAL_FUNC_DEF = '@global-interface-func-def';
+
+    /**
+     * document title
+     * @var mixed
+     */
+    var $title;
     /**
      * 
      * @var RegexMatcherContainer
@@ -73,6 +80,7 @@ class  TypeScriptDefToHtmlConverter
      */
     public function Convert(string $buffer, $visitor = null, $render = true)
     {
+        $title = $this->title ?? 'Document';
         $this->m_entry = null;
         $entry = &$this->m_entry;
         $entry = (object)[
@@ -80,7 +88,7 @@ class  TypeScriptDefToHtmlConverter
             'visitor' => $visitor
         ];
         $doc = igk_create_xmlnode('html');
-        $doc->head()->title()->setContent('Documentation');
+        $doc->head()->title()->setContent( $title );
         $body = $doc->body();
         $list = [];
         $this->m_container->treat($buffer, function ($g, $pos, $data) use (&$entry, &$list) {
@@ -322,6 +330,12 @@ class  TypeScriptDefToHtmlConverter
        
     }
 
+    /**
+     * visiting type
+     * @param mixed $e 
+     * @return void 
+     * @throws Exception 
+     */
     protected function _visit_type($e)
     {
         $k = 'type';
@@ -412,7 +426,8 @@ function igk_html_node_listitem(array $list)
 $file = igk_getv($params, 0) ?? igk_die('require file');
 $buffer = (file_exists($file) ? file_get_contents($file) : null) ?? igk_die('missing file content');
 $mimeType = IO::MimeTypeFromBuffer($buffer);
-if ($mimeType != 'text/x-java') {
+if (!in_array($mimeType, ['text/x-java', 'text/plain'])) {
+    Logger::danger('not valid mimeType : '.$mimeType);
     return -1;
 }
 $no_color = property_exists($command->options, '--no-color');
@@ -421,88 +436,11 @@ $outfile = igk_getv($command->options, '--output');
 $title = igk_getv($command->options, '--title');
 
 
-// $buffer = <<<JS
-// interface BONDJE{
-//     // x?: {h : '{string' };
-//     y : number;
-//     z : float
-// }
-// JS;
-
-
-// $buffer = <<<JS
-// interface VitePluginPWAAPI { 
-//     /**
-//      * Returns the PWA web manifest url for the manifest link:
-//      * <link rel="manifest" href="<webManifestUrl>" />
-//      *
-//      * Will also return if the manifest will require credentials:
-//      * <link rel="manifest" href="<webManifestUrl>" crossorigin="use-credentials" />
-//      */
-//     webManifestData(): WebManifestData | undefined;
-//     inpo(x: string):action
-//      }
-// JS;
-// $buffer = <<<JS
-// interface VitePluginPWAAPI { 
-//     integration?: {
-//         /**
-//          * The base url for the PWA assets.
-//          *
-//          * @default `vite.base`
-//          */
-//         baseUrl?: string;
-//     }
-// }
-// JS;
-
-$buffer = <<<JS
-declare const defaultInjectManifestVitePlugins: string[];
-type info = 'igkdev' | 'recal';
-type rascal = 'basi';
-declare function vitePWA(userOptions?: Partial<VitePWAOptions>): Plugin[];
-JS;
-$buffer = <<<JS
-interface ILitterDraw{
-    (x: number):void;
-    cxy: string;
-    new (x:float): IRenderObj;
-    axy: string;
-} 
-JS;
-
-
 
 
 $converter = new TypeScriptDefToHtmlConverter;
+$converter->title = $title;
 $sb = $converter->Convert($buffer, null, false);
-// $td = igk_create_notagnode();
-// $td->span('ok');
-// $td->span('bad');
-// $d = igk_create_node('div');
-// // $d->p('OK');
-// $d->add($td);
-// $sb = $d->render((object)['Indent'=>true]); 
-
-
-// $container = new RegexMatcherContainer;
-// $container->match("\/\/.+", "line-comment");
-
-// $ss = <<<EOF
-// // bonjour 
-// TTtreDocument
-// // aqua
-// EOF;
-
-// igk_debug(true);
-// $container->treat($ss, function($g){
-//     igk_wln($g->tokenID ." / ".$g->value);
-// });
-
-// exit;
-
-
-
 !$no_color && Logger::SetColorizer(new HtmlColorizer);
 $t =  $sb->getElementsByTagName('body');
 

@@ -1,2 +1,10 @@
 dist
 c-test
+node_modules
+
+
+# IDE 
+.vscode
+
+# script runner 
+.balafon

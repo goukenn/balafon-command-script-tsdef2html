@@ -1,0 +1,12 @@
+{
+  "name": "type.d.2.html",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/goukenn/balafon-command-script-tsdef2html",
+  "author": "C.A.D. Bondje Doue <bondje.doue@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "vite": "^5.4.10",
+    "vue": "^3.5.12"
+  }
+}
