@@ -1,7 +1,7 @@
 # CONVERT `.d.ts` file to `.html` content - script command 
 
 
-convertisseur de fichier d.ts => html page
+convert .d.ts => html 
 
 ## usage 
 
