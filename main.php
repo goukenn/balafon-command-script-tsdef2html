@@ -1,7 +1,7 @@
 <?php
-
-// @ convert type.d.ts file to html 
-// @command: balafon --run .test/js/type.d.2.html/main.php /Volumes/Data/Dev/tmp/theme-project/node_modules/vite-plugin-pwa/dist/index.d.ts --no-color > /tmp/sites/index.html
+// @author: C.A.D. BONDJE DOUE
+// @desc: convert type.d.ts file to html 
+// @command: balafon --run ./main.php
 
 use IGK\Helper\IO;
 use IGK\Helper\StringUtility;
@@ -530,14 +530,8 @@ Logger::print('<!DOCTYPE html>');
 Logger::print($sb->render($i));
 $c = ob_get_contents();
 ob_end_clean();
-
 if ($outfile) {
     igk_io_w2file($outfile, $c);
 } else
     echo $c;
-
 igk_exit();
-
-
-/// TASK : remove single comment from interface definition - OK 
-///
